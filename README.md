@@ -78,7 +78,7 @@ No modules.
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | (Required) The resource group in which to create the Storage Account component. | `any` | n/a | yes |
 | <a name="input_static_website_enabled"></a> [static\_website\_enabled](#input\_static\_website\_enabled) | Enable static website. | `string` | `false` | no |
 | <a name="input_storage_name"></a> [storage\_name](#input\_storage\_name) | n/a | `string` | n/a | yes |
-| <a name="input_systemaccess_developer_group_id"></a> [systemaccess\_developer\_group\_id](#input\_systemaccess\_developer\_group\_id) | The object id of the Azure AD group systemaccess-<system>-developers. Gets read access to the Storage Account. To grant additional access, use azurerm\_role\_assignment. | `string` | `"00000000-0000-0000-0000-000000000000"` | no |
+| <a name="input_systemaccess_developer_group_id"></a> [systemaccess\_developer\_group\_id](#input\_systemaccess\_developer\_group\_id) | The object id of an Azure AD group. Gets read access to the Storage Account. To grant additional access, use `azurerm_role_assignment`. | `string` | `"00000000-0000-0000-0000-000000000000"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
 
 ## Outputs
