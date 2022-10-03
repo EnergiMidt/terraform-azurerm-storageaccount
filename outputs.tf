@@ -1,3 +1,4 @@
 output "azurerm_storage_account" {
-  value = azurerm_storage_account.storage
+  description = "The Azure Storage Account resource."
+  value       = azurerm_storage_account.storage
 }
