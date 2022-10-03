@@ -91,7 +91,6 @@ resource "azurerm_storage_account_network_rules" "network_rules" {
   count              = var.network_rules_default_action != "" ? 1 : 0
   storage_account_id = azurerm_storage_account.storage.id
 
-  # checkov:skip=CKV_AZURE_109: The `default_action` variable defaults to Allow.
   # https://aquasecurity.github.io/tfsec/v1.28.0/checks/azure/storage/default-action-deny/
   # tfsec:ignore:azure-storage-default-action-deny
   default_action             = var.network_rules_default_action
