@@ -141,7 +141,7 @@ variable "override_location" {
 }
 
 variable "systemaccess_developer_group_id" {
-  description = "The object id of the Azure AD group systemaccess-<system>-developers. Gets read access to the Storage Account. To grant additional access, use azurerm_role_assignment."
+  description = "The object id of an Azure AD group. Gets read access to the Storage Account. To grant additional access, use `azurerm_role_assignment`."
   default     = "00000000-0000-0000-0000-000000000000"
   type        = string
   validation {
