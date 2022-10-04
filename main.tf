@@ -5,8 +5,8 @@ locals {
 
 resource "azurerm_storage_account" "storage_account" {
   name                = local.name
-  resource_group_name = var.resource_group.name
   location            = local.location
+  resource_group_name = var.resource_group.name
   tags                = var.tags
 
   account_tier             = var.account_tier
