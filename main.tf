@@ -4,7 +4,7 @@ locals {
   location = var.override_location == null ? var.resource_group.location : var.override_location
 }
 
-resource "azurerm_storage_account" "storage" {
+resource "azurerm_storage_account" "storage_account" {
   name                     = local.name
   resource_group_name      = var.resource_group.name
   location                 = local.location
