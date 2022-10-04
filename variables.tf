@@ -13,7 +13,7 @@ variable "environment" {
 }
 
 variable "name" {
-  description = "(Required) Specifies the name of the storage account. Only lowercase Alphanumeric characters allowed. Changing this forces a new resource to be created. This must be unique across the entire Azure service, not just within the resource group."
+  description = "(Required) The name which should be used for this resource. Changing this forces a new resource to be created."
   type        = string
 }
 
@@ -30,19 +30,19 @@ variable "override_location" {
 }
 
 variable "resource_group" {
-  description = "(Required) The resource group in which to create the Storage Account component."
+  description = "(Required) The resource group where this resource should exist."
   type        = any
 }
 
 # This `resource_group_name` variable is replaced by the use of `resource_group` variable.
 # variable "resource_group_name" {
-#   description = "(Required) The name of the resource group in which the Log Analytics workspace is created. Changing this forces a new resource to be created."
+#   description = "(Required) The name of the resource group where the resource should exist. Changing this forces a new resource to be created."
 #   type        = string
 # }
 
 # This `location` variable is replaced by the use of `resource_group` variable.
 # variable "location" {
-#   description = "(Required) Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created."
+#   description = "(Required) The location where the resource should exist. Changing this forces a new resource to be created."
 #   type        = string
 # }
 
@@ -213,12 +213,12 @@ variable "blob_properties" {
 
 variable "tags" {
   description = "(Optional) A mapping of tags to assign to the resource."
-  default     = {}
   type        = map(string)
+  default     = {}
 }
 
 variable "azurerm_key_vault" {
   description = "(Optional) The Azure Key Vault instance to store secrets."
-  default     = null
   type        = any
+  default     = null
 }
