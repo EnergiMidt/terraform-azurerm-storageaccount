@@ -88,7 +88,7 @@ resource "azurerm_storage_account" "storage_account" {
 # azure-cis-3.8.x-storage-trusted-microsoft-services-is-enabled
 resource "azurerm_storage_account_network_rules" "network_rules" {
   count              = var.network_rules_default_action != "" ? 1 : 0
-  storage_account_id = azurerm_storage_account.storage.id
+  storage_account_id = azurerm_storage_account.storage_account.id
 
   # https://aquasecurity.github.io/tfsec/v1.28.0/checks/azure/storage/default-action-deny/
   # tfsec:ignore:azure-storage-default-action-deny
@@ -101,62 +101,62 @@ resource "azurerm_storage_account_network_rules" "network_rules" {
 # azure-cis-3.x-storage-advanced-threat-protection-is-enabled
 resource "azurerm_advanced_threat_protection" "advanced_threat_protection" {
   count              = var.enable_advanced_threat_protection ? 1 : 0
-  target_resource_id = azurerm_storage_account.storage.id
+  target_resource_id = azurerm_storage_account.storage_account.id
   enabled            = var.enable_advanced_threat_protection
 }
 
 resource "azurerm_role_assignment" "azurerm_role_assignment_developer_blob_data_contributor" {
   count                = var.systemaccess_developer_group_id == "00000000-0000-0000-0000-000000000000" ? 0 : 1
-  scope                = azurerm_storage_account.storage.id
+  scope                = azurerm_storage_account.storage_account.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = var.systemaccess_developer_group_id
 }
 
 resource "azurerm_role_assignment" "azurerm_role_assignment_developer_blob_data_reader" {
   count                = var.systemaccess_developer_group_id == "00000000-0000-0000-0000-000000000000" ? 0 : 1
-  scope                = azurerm_storage_account.storage.id
+  scope                = azurerm_storage_account.storage_account.id
   role_definition_name = "Storage Blob Data Reader"
   principal_id         = var.systemaccess_developer_group_id
 }
 
 resource "azurerm_role_assignment" "azurerm_role_assignment_developer_queue_data_reader" {
   count                = var.systemaccess_developer_group_id == "00000000-0000-0000-0000-000000000000" ? 0 : 1
-  scope                = azurerm_storage_account.storage.id
+  scope                = azurerm_storage_account.storage_account.id
   role_definition_name = "Storage Queue Data Reader"
   principal_id         = var.systemaccess_developer_group_id
 }
 
 resource "azurerm_role_assignment" "azurerm_role_assignment_developer_reader_and_data_access" {
   count                = var.systemaccess_developer_group_id == "00000000-0000-0000-0000-000000000000" ? 0 : 1
-  scope                = azurerm_storage_account.storage.id
+  scope                = azurerm_storage_account.storage_account.id
   role_definition_name = "Reader and Data Access"
   principal_id         = var.systemaccess_developer_group_id
 }
 
 resource "azurerm_key_vault_secret" "primary_access_key" {
   count        = var.azurerm_key_vault == null ? 0 : 1
-  name         = "${azurerm_storage_account.storage.name}-primary-access-key" # Error: "name" may only contain alphanumeric characters and dashes.
-  value        = azurerm_storage_account.storage.primary_access_key
+  name         = "${azurerm_storage_account.storage_account.name}-primary-access-key" # Error: "name" may only contain alphanumeric characters and dashes.
+  value        = azurerm_storage_account.storage_account.primary_access_key
   key_vault_id = var.azurerm_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "secondary_access_key" {
   count        = var.azurerm_key_vault == null ? 0 : 1
-  name         = "${azurerm_storage_account.storage.name}-secondary-access-key" # Error: "name" may only contain alphanumeric characters and dashes.
-  value        = azurerm_storage_account.storage.secondary_access_key
+  name         = "${azurerm_storage_account.storage_account.name}-secondary-access-key" # Error: "name" may only contain alphanumeric characters and dashes.
+  value        = azurerm_storage_account.storage_account.secondary_access_key
   key_vault_id = var.azurerm_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "primary_connection_string" {
   count        = var.azurerm_key_vault == null ? 0 : 1
-  name         = "${azurerm_storage_account.storage.name}-primary-connection-string" # Error: "name" may only contain alphanumeric characters and dashes.
-  value        = azurerm_storage_account.storage.primary_connection_string
+  name         = "${azurerm_storage_account.storage_account.name}-primary-connection-string" # Error: "name" may only contain alphanumeric characters and dashes.
+  value        = azurerm_storage_account.storage_account.primary_connection_string
   key_vault_id = var.azurerm_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "secondary_connection_string" {
   count        = var.azurerm_key_vault == null ? 0 : 1
-  name         = "${azurerm_storage_account.storage.name}-secondary-connection-string" # Error: "name" may only contain alphanumeric characters and dashes.
-  value        = azurerm_storage_account.storage.secondary_connection_string
+  name         = "${azurerm_storage_account.storage_account.name}-secondary-connection-string" # Error: "name" may only contain alphanumeric characters and dashes.
+  value        = azurerm_storage_account.storage_account.secondary_connection_string
   key_vault_id = var.azurerm_key_vault.id
 }
