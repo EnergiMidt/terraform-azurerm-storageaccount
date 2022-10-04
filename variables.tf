@@ -1,6 +1,5 @@
 variable "environment" {
   description = "(Required) The name of the environment."
-  default     = null
   type        = string
   validation {
     condition = contains([
@@ -12,8 +11,14 @@ variable "environment" {
   }
 }
 
-variable "name" {
-  description = "(Required) The name which should be used for this resource. Changing this forces a new resource to be created."
+# This `name` variable is replaced by the use of `system_name` and `environment` variables.
+# variable "name" {
+#   description = "(Required) The name which should be used for this resource. Changing this forces a new resource to be created."
+#   type        = string
+# }
+
+variable "system_name" {
+  description = "(Required) The systen name which should be used for this resource. Changing this forces a new resource to be created."
   type        = string
 }
 
