@@ -1,14 +1,14 @@
 locals {
-  standard_name = var.storage_name
-  # standard_name = "${var.storage_name}${var.environment}"
+  name = var.name
+  # name = "${var.name}${var.environment}"
 
-  loc = var.override_location != "" ? var.override_location : var.resource_group.location
+  location = var.override_location != "" ? var.override_location : var.resource_group.location
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                     = var.override_name != "" ? var.override_name : local.standard_name
+  name                     = var.override_name != "" ? var.override_name : local.name
   resource_group_name      = var.resource_group.name
-  location                 = local.loc
+  location                 = local.location
   account_tier             = var.account_tier
   account_kind             = var.account_kind
   account_replication_type = var.account_replication_type

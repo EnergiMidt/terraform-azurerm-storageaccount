@@ -12,8 +12,9 @@ variable "environment" {
   }
 }
 
-variable "storage_name" {
-  type = string
+variable "name" {
+  description = "(Required) Specifies the name of the storage account. Only lowercase Alphanumeric characters allowed. Changing this forces a new resource to be created. This must be unique across the entire Azure service, not just within the resource group."
+  type        = string
 }
 
 variable "override_name" {
@@ -26,6 +27,19 @@ variable "resource_group" {
   description = "(Required) The resource group in which to create the Storage Account component."
   type        = any
 }
+
+# This `resource_group_name` variable is replaced by the use of `resource_group` variable.
+# variable "resource_group_name" {
+#   description = "(Required) The name of the resource group in which the Log Analytics workspace is created. Changing this forces a new resource to be created."
+#   type        = string
+# }
+
+# This `location` variable is replaced by the use of `resource_group` variable.
+# variable "location" {
+#   description = "(Required) Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created."
+#   type        = string
+# }
+
 
 variable "account_replication_type" {
   description = "(Required) Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS. Changing this forces a new resource to be created when types LRS, GRS and RAGRS are changed to ZRS, GZRS or RAGZRS and vice versa."
