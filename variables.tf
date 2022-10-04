@@ -19,7 +19,13 @@ variable "name" {
 
 variable "override_name" {
   description = "(Optional) Override the name of the resource. Under normal circumstances, it should not be used."
-  default     = ""
+  default     = null
+  type        = string
+}
+
+variable "override_location" {
+  description = "(Optional) Override the location of the resource. Under normal circumstances, it should not be used."
+  default     = null
   type        = string
 }
 
@@ -147,11 +153,6 @@ variable "network_rules_bypass" {
   description = "(Optional) Specifies whether traffic is bypassed for AzureServices/Logging/Metrics. Valid options are any combination of Logging, Metrics, AzureServices, or None."
   default     = ["AzureServices"] # Ignored if network_rules_default_action has Allow as value.
   type        = list(string)
-}
-
-variable "override_location" {
-  default = ""
-  type    = string
 }
 
 variable "systemaccess_developer_group_id" {
