@@ -69,6 +69,7 @@ No modules.
 | <a name="input_enable_storage_queue_logging"></a> [enable\_storage\_queue\_logging](#input\_enable\_storage\_queue\_logging) | (Optional) Is storage logging is enabled for queue service? | `bool` | `true` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | (Required) The name of the environment. | `string` | `null` | no |
 | <a name="input_min_tls_version"></a> [min\_tls\_version](#input\_min\_tls\_version) | (Optional) The minimum supported TLS version for the storage account. Possible values are `TLS1_0`, `TLS1_1`, and `TLS1_2`. Defaults to `TLS1_2` for new storage accounts. | `string` | `"TLS1_2"` | no |
+| <a name="input_name"></a> [name](#input\_name) | (Required) Specifies the name of the storage account. Only lowercase Alphanumeric characters allowed. Changing this forces a new resource to be created. This must be unique across the entire Azure service, not just within the resource group. | `string` | n/a | yes |
 | <a name="input_network_rules_bypass"></a> [network\_rules\_bypass](#input\_network\_rules\_bypass) | (Optional) Specifies whether traffic is bypassed for AzureServices/Logging/Metrics. Valid options are any combination of Logging, Metrics, AzureServices, or None. | `list(string)` | <pre>[<br>  "AzureServices"<br>]</pre> | no |
 | <a name="input_network_rules_default_action"></a> [network\_rules\_default\_action](#input\_network\_rules\_default\_action) | (Optional) Specifies the default action of allow or deny when no other rules match. Valid options are Deny or Allow. | `string` | `"Allow"` | no |
 | <a name="input_network_rules_ip_rules"></a> [network\_rules\_ip\_rules](#input\_network\_rules\_ip\_rules) | (Optional) List of public IP or IP ranges in CIDR Format. Only IPV4 addresses are allowed. Private IP address ranges (as defined in RFC 1918) are not allowed. | `list(string)` | `[]` | no |
@@ -77,7 +78,6 @@ No modules.
 | <a name="input_override_name"></a> [override\_name](#input\_override\_name) | (Optional) Override the name of the resource. Under normal circumstances, it should not be used. | `string` | `""` | no |
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | (Required) The resource group in which to create the Storage Account component. | `any` | n/a | yes |
 | <a name="input_static_website_enabled"></a> [static\_website\_enabled](#input\_static\_website\_enabled) | Enable static website. | `string` | `false` | no |
-| <a name="input_storage_name"></a> [storage\_name](#input\_storage\_name) | n/a | `string` | n/a | yes |
 | <a name="input_systemaccess_developer_group_id"></a> [systemaccess\_developer\_group\_id](#input\_systemaccess\_developer\_group\_id) | The object id of an Azure AD group. Gets read access to the Storage Account. To grant additional access, use `azurerm_role_assignment`. | `string` | `"00000000-0000-0000-0000-000000000000"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
 
