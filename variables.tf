@@ -51,26 +51,9 @@ variable "resource_group" {
 #   type        = string
 # }
 
-
-variable "account_replication_type" {
-  description = "(Required) Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS. Changing this forces a new resource to be created when types LRS, GRS and RAGRS are changed to ZRS, GZRS or RAGZRS and vice versa."
-  type        = string
-  validation {
-    condition = contains([
-      "LRS",
-      "GRS",
-      "RAGRS",
-      "ZRS",
-      "GZRS",
-      "RAGZRS"
-    ], var.account_replication_type)
-    error_message = "The `account_replication_type` variable must be one of `LRS`, `GRS`, `RAGRS`, `ZRS`, `GZRS` or `RAGZRS`."
-  }
-}
-
 variable "account_kind" {
   default     = "StorageV2"
-  description = "(Optional) Defines the Kind of account. Valid options are BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2. Changing this forces a new resource to be created. Defaults to StorageV2."
+  description = "(Optional) Defines the Kind of account. Valid options are `BlobStorage`, `BlockBlobStorage`, `FileStorage`, `Storage` or `StorageV2`. Changing this forces a new resource to be created. Defaults to StorageV2."
   type        = string
   validation {
     condition = contains([
@@ -90,95 +73,121 @@ variable "account_tier" {
   default     = "Standard"
   validation {
     condition     = can(regex("^(Standard|Premium)$", var.account_tier))
-    error_message = "The `account_tier` variable must be one of `Standard` or `Premium`."
+    error_message = "Valid options are `Standard` and `Premium`."
   }
 }
 
-variable "min_tls_version" {
-  description = " (Optional) The minimum supported TLS version for the storage account. Possible values are `TLS1_0`, `TLS1_1`, and `TLS1_2`. Defaults to `TLS1_2` for new storage accounts."
+variable "account_replication_type" {
+  description = "(Required) Defines the type of replication to use for this storage account. Valid options are `LRS`, `GRS`, `RAGRS`, `ZRS`, `GZRS` or `RAGZRS`. Changing this forces a new resource to be created when types LRS, GRS and RAGRS are changed to ZRS, GZRS or RAGZRS and vice versa."
   type        = string
-  default     = "TLS1_2"
   validation {
-    condition     = can(regex("^(TLS1_0|TLS1_1|TLS1_2)$", var.min_tls_version))
-    error_message = "The `account_kind` variable must be one of `TLS1_0`, `TLS1_1` or `TLS1_2`."
+    condition = contains([
+      "LRS",
+      "GRS",
+      "RAGRS",
+      "ZRS",
+      "GZRS",
+      "RAGZRS"
+    ], var.account_replication_type)
+    error_message = "Valid options are `LRS`, `GRS`, `RAGRS`, `ZRS`, `GZRS` or `RAGZRS`."
   }
+}
+
+variable "cross_tenant_replication_enabled" {
+  description = "(Optional) Should cross Tenant replication be enabled? Defaults to `true`."
+  type        = bool
+  default     = true
+}
+
+variable "access_tier" {
+  description = "(Optional) Defines the access tier for `BlobStorage`, `FileStorage` and `StorageV2` accounts. Valid options are `Hot` and `Cool`. Defaults to `Hot`."
+  type        = string
+  default     = "Hot"
+  validation {
+    condition     = can(regex("^(Hot|Cool)$", var.access_tier))
+    error_message = "Valid options are `Hot` and `Cool`."
+  }
+}
+
+variable "edge_zone" {
+  description = "(Optional) Specifies the Edge Zone within the Azure Region where this Storage Account should exist. Changing this forces a new Storage Account to be created."
+  type        = string
+  default     = null
 }
 
 variable "enable_https_traffic_only" {
   # azure-cis-3.1-storage-secure-transfer-required-is-enabled
-  description = "(Optional) Is traffic only allowed via HTTPS? See https://docs.microsoft.com/en-us/azure/storage/common/storage-require-secure-transfer for more information."
+  description = "(Optional) Boolean flag which forces HTTPS if enabled, see [here](https://docs.microsoft.com/azure/storage/storage-require-secure-transfer/) for more information. Defaults to `true`."
+  type        = bool
   default     = true
-  type        = bool
 }
 
-variable "enable_storage_queue_logging" {
-  # azure-cis-3.3-storage-queue-logging-is-enable
-  # https://github.com/terraform-providers/terraform-provider-azurerm/issues/4401#issuecomment-579400404
-  description = "(Optional) Is storage logging is enabled for queue service?"
-  default     = true
-  type        = bool
-}
-
-variable "enable_advanced_threat_protection" {
-  # azure-cis-3.x-storage-advanced-threat-protection-is-enabled
-  description = "(Optional) Should costly Advanced Threat Protection be enabled on this resource? Enable only in production environment is highly recommended."
-  type        = bool
-  default     = false
-}
-
-variable "network_rules_default_action" {
-  # azure-cis-3.7.x-storage-default-network-access-rule-set-to-deny
-  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules
-  # https://aquasecurity.github.io/tfsec/v1.28.0/checks/azure/storage/default-action-deny/
-  # tfsec:ignore:azure-storage-default-action-deny
-  description = "(Optional) Specifies the default action of allow or deny when no other rules match. Valid options are Deny or Allow."
-  default     = "Allow" # Use Allow as our custom default value as the recommmended Deny value by Center for Internet Security (CIS) is too restrictive.
+variable "min_tls_version" {
+  description = "(Optional) The minimum supported TLS version for the storage account. Possible values are `TLS1_0`, `TLS1_1`, and `TLS1_2`. Defaults to `TLS1_2` for new storage accounts."
   type        = string
-}
-
-variable "network_rules_ip_rules" {
-  # azure-cis-3.7.x-storage-default-network-access-rule-set-to-deny
-  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules
-  description = "(Optional) List of public IP or IP ranges in CIDR Format. Only IPV4 addresses are allowed. Private IP address ranges (as defined in RFC 1918) are not allowed."
-  default     = [] # Ignored if network_rules_default_action has Allow as value.
-  type        = list(string)
-}
-
-variable "network_rules_virtual_network_subnet_ids" {
-  # azure-cis-3.7.x-storage-default-network-access-rule-set-to-deny
-  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules
-  description = "(Optional) A list of virtual network subnet ids to to secure the storage account."
-  default     = [] # Ignored if network_rules_default_action has Allow as value.
-  type        = list(string)
-}
-
-variable "network_rules_bypass" {
-  # azure-cis-3.7.x-storage-default-network-access-rule-set-to-deny
-  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules
-  description = "(Optional) Specifies whether traffic is bypassed for AzureServices/Logging/Metrics. Valid options are any combination of Logging, Metrics, AzureServices, or None."
-  default     = ["AzureServices"] # Ignored if network_rules_default_action has Allow as value.
-  type        = list(string)
-}
-
-variable "systemaccess_developer_group_id" {
-  description = "The object id of an Azure AD group. Gets read access to the Storage Account. To grant additional access, use `azurerm_role_assignment`."
-  default     = "00000000-0000-0000-0000-000000000000"
-  type        = string
+  default     = "TLS1_2"
   validation {
-    condition     = can(regex("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$", var.systemaccess_developer_group_id))
-    error_message = "The systemaccess_developer_group_id value must be a valid globally unique identifier (GUID)."
+    condition     = can(regex("^(TLS1_0|TLS1_1|TLS1_2)$", var.min_tls_version))
+    error_message = "Possible values are `TLS1_0`, `TLS1_1`, and `TLS1_2`."
   }
 }
 
-variable "static_website_enabled" {
-  description = "Enable static website."
-  type        = string
+variable "allow_nested_items_to_be_public" {
+  description = "(Optional) Allow or disallow nested items within this Account to opt into being public. Defaults to `true`."
+  type        = bool
+  default     = true
+}
+
+variable "shared_access_key_enabled" {
+  description = "(Optional) Indicates whether the storage account permits requests to be authorized with the account access key via Shared Key. If false, then all requests, including shared access signatures, must be authorized with Azure Active Directory (Azure AD). The default value is `true`."
+  type        = bool
+  default     = true
+}
+
+variable "public_network_access_enabled" {
+  description = "(Optional) Whether the public network access is enabled? Defaults to `true`."
+  type        = bool
+  default     = true
+}
+
+variable "default_to_oauth_authentication" {
+  description = "(Optional) Default to Azure Active Directory authorization in the Azure portal when accessing the Storage Account. The default value is `false`."
+  type        = bool
   default     = false
 }
 
-variable "blob_properties" {
+variable "is_hns_enabled" {
+  description = "(Optional) Is Hierarchical Namespace enabled? This can be used with Azure Data Lake Storage Gen 2 ([see here for more information](https://docs.microsoft.com/azure/storage/blobs/data-lake-storage-quickstart-create-account/)). Changing this forces a new resource to be created."
+  type        = bool
+  default     = null
+}
+
+variable "nfsv3_enabled" {
+  description = "(Optional) Is NFSv3 protocol enabled? Changing this forces a new resource to be created. Defaults to `false`."
+  type        = bool
+  default     = false
+}
+
+variable "custom_domain" {
+  description = "(Optional) A `custom_domain` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type        = any
   default     = []
-  description = "(Optional) The properties of a storage account's blob service."
+}
+
+variable "customer_managed_key" {
+  description = "(Optional) A `customer_managed_key` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type        = any
+  default     = []
+}
+
+variable "identity" {
+  description = "(Optional) An `identity` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type        = any
+  default     = []
+}
+
+variable "blob_properties" {
+  description = "(Optional) A `blob_properties` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
   type = list(
     object(
       {
@@ -214,12 +223,187 @@ variable "blob_properties" {
       }
     )
   )
+  default = []
+}
+
+variable "queue_properties" {
+  description = "(Optional) A `queue_properties` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type = list(
+    object(
+      {
+        cors_rule = optional(list(
+          object(
+            {
+              allowed_headers    = list(string)
+              allowed_methods    = list(string)
+              allowed_origins    = list(string)
+              exposed_headers    = list(string)
+              max_age_in_seconds = number
+            }
+          )
+        ))
+        logging = optional(list(
+          object(
+            {
+              delete                = bool
+              read                  = bool
+              write                 = bool
+              version               = string
+              retention_policy_days = optional(number)
+            }
+          )
+        ))
+        hour_metrics = optional(list(
+          object(
+            {
+              enabled               = bool
+              version               = string
+              include_apis          = optional(bool)
+              retention_policy_days = optional(number)
+            }
+          )
+        ))
+        minute_metrics = optional(list(
+          object(
+            {
+              enabled               = bool
+              version               = string
+              include_apis          = optional(bool)
+              retention_policy_days = optional(number)
+            }
+          )
+        ))
+      }
+    )
+  )
+  default = [{
+    cors_rule = []
+    logging = [{
+      delete                = true
+      read                  = true
+      write                 = true
+      version               = "1.0"
+      retention_policy_days = 90
+    }]
+    hour_metrics = [{
+      enabled               = true
+      include_apis          = true
+      version               = "1.0"
+      retention_policy_days = 90
+    }]
+    minute_metrics = [{
+      enabled               = true
+      include_apis          = true
+      version               = "1.0"
+      retention_policy_days = 90
+    }]
+  }]
+}
+
+variable "static_website" {
+  description = "(Optional) A `static_website` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type        = any
+  default     = []
+}
+
+variable "share_properties" {
+  description = "(Optional) A `share_properties` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type        = any
+  default     = []
+}
+
+variable "network_rules" {
+  description = "(Optional) A `network_rules` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type = list(object({
+    default_action             = string
+    bypass                     = optional(list(string))
+    ip_rules                   = optional(list(string))
+    virtual_network_subnet_ids = optional(list(string))
+    private_link_access = optional(list(
+      object({
+        endpoint_resource_id = string
+        endpoint_tenant_id   = optional(string)
+      })
+    ))
+  }))
+  # azure-cis-3.7.x-storage-default-network-access-rule-set-to-deny
+  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules
+  # https://aquasecurity.github.io/tfsec/v1.28.0/checks/azure/storage/default-action-deny/
+  # tfsec:ignore:azure-storage-default-action-deny
+  default = [{
+    default_action             = "Allow"
+    bypass                     = ["AzureServices"]
+    ip_rules                   = []
+    virtual_network_subnet_ids = []
+    private_link_access        = []
+  }]
+}
+
+variable "large_file_share_enabled" {
+  description = "(Optional) Is Large File Share Enabled?"
+  type        = bool
+  default     = false
+}
+
+variable "azure_files_authentication" {
+  description = "(Optional) An `azure_files_authentication` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type        = any
+  default     = []
+}
+
+variable "routing" {
+  description = "(Optional) A `routing` block as documented [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)."
+  type        = any
+  default     = []
+}
+
+variable "queue_encryption_key_type" {
+  description = "(Optional) The encryption type of the queue service. Possible values are `Service` and `Account`. Changing this forces a new resource to be created. Default value is `Service`."
+  type        = string
+  default     = "Service"
+  validation {
+    condition     = can(regex("^(Service|Account)$", var.queue_encryption_key_type))
+    error_message = "Possible values are `Service` and `Account`."
+  }
+}
+
+variable "table_encryption_key_type" {
+  description = "(Optional) The encryption type of the table service. Possible values are `Service` and `Account`. Changing this forces a new resource to be created. Default value is `Service`."
+  type        = string
+  default     = "Service"
+  validation {
+    condition     = can(regex("^(Service|Account)$", var.table_encryption_key_type))
+    error_message = "Possible values are `Service` and `Account`."
+  }
+}
+
+variable "infrastructure_encryption_enabled" {
+  description = "(Optional) Is infrastructure encryption enabled? Changing this forces a new resource to be created. Defaults to `false`."
+  type        = bool
+  default     = false
 }
 
 variable "tags" {
   description = "(Optional) A mapping of tags to assign to the resource."
   type        = map(string)
   default     = {}
+}
+
+variable "enable_advanced_threat_protection" {
+  # azure-cis-3.x-storage-advanced-threat-protection-is-enabled
+  description = "(Optional) Should costly Advanced Threat Protection be enabled on this resource? Enable only in production environment is highly recommended."
+  type        = bool
+  default     = false
+}
+
+variable "systemaccess_developer_group_id" {
+  description = "The object id of an Azure AD group. Gets read access to the Storage Account. To grant additional access, use `azurerm_role_assignment`."
+  default     = "00000000-0000-0000-0000-000000000000"
+  type        = string
+  validation {
+    condition     = can(regex("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$", var.systemaccess_developer_group_id))
+    error_message = "The systemaccess_developer_group_id value must be a valid globally unique identifier (GUID)."
+  }
 }
 
 variable "azurerm_key_vault" {
