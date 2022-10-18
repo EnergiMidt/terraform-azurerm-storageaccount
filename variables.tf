@@ -406,8 +406,8 @@ variable "systemaccess_developer_group_id" {
   }
 }
 
-variable "azurerm_key_vault" {
-  description = "(Optional) The Azure Key Vault instance to store secrets."
-  type        = any
-  default     = null
-}
+# variable "azurerm_key_vault" {
+#   description = "(Optional) The Azure Key Vault instance to store secrets."
+#   type        = any
+#   default     = null
+# }

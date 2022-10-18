@@ -279,30 +279,30 @@ resource "azurerm_role_assignment" "azurerm_role_assignment_developer_reader_and
   principal_id         = var.systemaccess_developer_group_id
 }
 
-resource "azurerm_key_vault_secret" "primary_access_key" {
-  count        = var.azurerm_key_vault == null ? 0 : 1
-  name         = "${azurerm_storage_account.storage_account.name}-primary-access-key" # Note: "name" may only contain alphanumeric characters and dashes.
-  value        = azurerm_storage_account.storage_account.primary_access_key
-  key_vault_id = var.azurerm_key_vault.id
-}
+# resource "azurerm_key_vault_secret" "primary_access_key" {
+#   count        = var.azurerm_key_vault == null ? 0 : 1
+#   name         = "${azurerm_storage_account.storage_account.name}-primary-access-key" # Note: "name" may only contain alphanumeric characters and dashes.
+#   value        = azurerm_storage_account.storage_account.primary_access_key
+#   key_vault_id = var.azurerm_key_vault.id
+# }
 
-resource "azurerm_key_vault_secret" "secondary_access_key" {
-  count        = var.azurerm_key_vault == null ? 0 : 1
-  name         = "${azurerm_storage_account.storage_account.name}-secondary-access-key" # Note: "name" may only contain alphanumeric characters and dashes.
-  value        = azurerm_storage_account.storage_account.secondary_access_key
-  key_vault_id = var.azurerm_key_vault.id
-}
+# resource "azurerm_key_vault_secret" "secondary_access_key" {
+#   count        = var.azurerm_key_vault == null ? 0 : 1
+#   name         = "${azurerm_storage_account.storage_account.name}-secondary-access-key" # Note: "name" may only contain alphanumeric characters and dashes.
+#   value        = azurerm_storage_account.storage_account.secondary_access_key
+#   key_vault_id = var.azurerm_key_vault.id
+# }
 
-resource "azurerm_key_vault_secret" "primary_connection_string" {
-  count        = var.azurerm_key_vault == null ? 0 : 1
-  name         = "${azurerm_storage_account.storage_account.name}-primary-connection-string" # Note: "name" may only contain alphanumeric characters and dashes.
-  value        = azurerm_storage_account.storage_account.primary_connection_string
-  key_vault_id = var.azurerm_key_vault.id
-}
+# resource "azurerm_key_vault_secret" "primary_connection_string" {
+#   count        = var.azurerm_key_vault == null ? 0 : 1
+#   name         = "${azurerm_storage_account.storage_account.name}-primary-connection-string" # Note: "name" may only contain alphanumeric characters and dashes.
+#   value        = azurerm_storage_account.storage_account.primary_connection_string
+#   key_vault_id = var.azurerm_key_vault.id
+# }
 
-resource "azurerm_key_vault_secret" "secondary_connection_string" {
-  count        = var.azurerm_key_vault == null ? 0 : 1
-  name         = "${azurerm_storage_account.storage_account.name}-secondary-connection-string" # Note: "name" may only contain alphanumeric characters and dashes.
-  value        = azurerm_storage_account.storage_account.secondary_connection_string
-  key_vault_id = var.azurerm_key_vault.id
-}
+# resource "azurerm_key_vault_secret" "secondary_connection_string" {
+#   count        = var.azurerm_key_vault == null ? 0 : 1
+#   name         = "${azurerm_storage_account.storage_account.name}-secondary-connection-string" # Note: "name" may only contain alphanumeric characters and dashes.
+#   value        = azurerm_storage_account.storage_account.secondary_connection_string
+#   key_vault_id = var.azurerm_key_vault.id
+# }
