@@ -235,13 +235,15 @@ resource "azurerm_storage_account" "storage_account" {
     }
   }
 
+  infrastructure_encryption_enabled = try(var.infrastructure_encryption_enabled, false)
+
+  tags = var.tags
+
   lifecycle {
     ignore_changes = [
       location, resource_group_name
     ]
   }
-
-  tags = var.tags
 }
 
 # azure-cis-3.x-storage-advanced-threat-protection-is-enabled
