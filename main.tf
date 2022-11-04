@@ -193,7 +193,7 @@ resource "azurerm_storage_account" "storage_account" {
       virtual_network_subnet_ids = try(network_rules.value.subnets, null)
 
       dynamic "private_link_access" {
-        for_each = network_rules.value.private_link_access
+        for_each = network_rules.value.private_link_access[*]
         content {
           endpoint_resource_id = try(private_link_access.value.endpoint_resource_id, null)
           endpoint_tenant_id   = try(private_link_access.value.endpoint_tenant_id, null)
