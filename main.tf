@@ -16,7 +16,7 @@ resource "azurerm_storage_account" "storage_account" {
   edge_zone                        = var.edge_zone
 
   # azure-cis-3.1-storage-secure-transfer-required-is-enabled
-  enable_https_traffic_only = var.enable_https_traffic_only
+  https_traffic_only_enabled = var.enable_https_traffic_only
 
   min_tls_version                 = var.min_tls_version
   allow_nested_items_to_be_public = var.allow_nested_items_to_be_public
