@@ -162,6 +162,12 @@ variable "is_hns_enabled" {
   default     = null
 }
 
+variable "sftp_enabled" {
+  description = "(Optional) (Optional) Boolean, enable SFTP for the storage account."
+  type        = bool
+  default     = false
+}
+
 variable "nfsv3_enabled" {
   description = "(Optional) Is NFSv3 protocol enabled? Changing this forces a new resource to be created. Defaults to `false`."
   type        = bool
