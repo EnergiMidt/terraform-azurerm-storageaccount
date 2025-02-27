@@ -163,7 +163,7 @@ variable "is_hns_enabled" {
 }
 
 variable "sftp_enabled" {
-  description = "(Optional) (Optional) Boolean, enable SFTP for the storage account."
+  description = "(Optional) Enable SFTP for the storage account. Defaults to `false`."
   type        = bool
   default     = false
 }
