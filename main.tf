@@ -25,6 +25,7 @@ resource "azurerm_storage_account" "storage_account" {
   default_to_oauth_authentication = var.default_to_oauth_authentication
 
   is_hns_enabled = var.is_hns_enabled
+  sftp_enabled = var.sftp_enabled
   nfsv3_enabled  = var.nfsv3_enabled
 
   dynamic "custom_domain" {
