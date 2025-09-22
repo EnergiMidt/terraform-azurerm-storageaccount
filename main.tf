@@ -25,7 +25,7 @@ resource "azurerm_storage_account" "storage_account" {
   default_to_oauth_authentication = var.default_to_oauth_authentication
 
   is_hns_enabled = var.is_hns_enabled
-  sftp_enabled = var.sftp_enabled
+  sftp_enabled   = var.sftp_enabled
   nfsv3_enabled  = var.nfsv3_enabled
 
   dynamic "custom_domain" {
@@ -83,66 +83,6 @@ resource "azurerm_storage_account" "storage_account" {
           days = container_delete_retention_policy.value.days
         }
       }
-    }
-  }
-
-  dynamic "queue_properties" {
-    for_each = var.queue_properties
-
-    content {
-      dynamic "cors_rule" {
-        for_each = queue_properties.value.cors_rule
-
-        content {
-          allowed_headers    = cors_rule.value.allowed_headers
-          allowed_methods    = cors_rule.value.allowed_methods
-          allowed_origins    = cors_rule.value.allowed_origins
-          exposed_headers    = cors_rule.value.exposed_headers
-          max_age_in_seconds = cors_rule.value.max_age_in_seconds
-        }
-      }
-
-      dynamic "logging" {
-        for_each = queue_properties.value.logging
-        content {
-          delete                = logging.value.delete
-          read                  = logging.value.read
-          write                 = logging.value.write
-          version               = logging.value.version
-          retention_policy_days = try(logging.value.retention_policy_days, 7)
-        }
-      }
-
-      dynamic "minute_metrics" {
-        for_each = queue_properties.value.minute_metrics
-
-        content {
-          enabled               = minute_metrics.value.enabled
-          version               = minute_metrics.value.version
-          include_apis          = try(minute_metrics.value.include_apis, null)
-          retention_policy_days = try(minute_metrics.value.retention_policy_days, 7)
-        }
-      }
-
-      dynamic "hour_metrics" {
-        for_each = queue_properties.value.hour_metrics
-
-        content {
-          enabled               = hour_metrics.value.enabled
-          version               = hour_metrics.value.version
-          include_apis          = try(hour_metrics.value.include_apis, null)
-          retention_policy_days = try(hour_metrics.value.retention_policy_days, 7)
-        }
-      }
-    }
-  }
-
-  dynamic "static_website" {
-    for_each = var.static_website
-
-    content {
-      index_document     = try(static_website.value.index_document, null)
-      error_404_document = try(static_website.value.error_404_document, null)
     }
   }
 
